@@ -34,3 +34,6 @@ main
 
 # Vscode
 .vscode
+
+# Text files
+*.txt

@@ -3,14 +3,15 @@
 #include "clib/clibstr.h"
 #include "clib/clibio.h"
 
-#define SIZE 1000
 #define TXTSIZE_G 80
 #define TXTSIZE_B 60
 
 int current = 0;
+int size = 0;
 clib::string* Gàidhlig;
 clib::string* Berula;
 clib::string page;
+clib::string sizeStr;
 
 clib::string to_string(int n, int base) {
 
@@ -28,19 +29,25 @@ clib::string to_string(int n, int base) {
 }
 
 void loadWords() {
-    Gàidhlig = clib::FileReadAllText("gàidhlig.txt").split('\n',SIZE);
-    Berula = clib::FileReadAllText("berula.txt").split('\n',SIZE);
+    clib::string rawGàidhlig = clib::FileReadAllText("gàidhlig.txt");
+    size = rawGàidhlig.countOccur('\n');
+    Gàidhlig = rawGàidhlig.split('\n',size);
+    Berula = clib::FileReadAllText("english.txt").split('\n',size);
+    sizeStr = clib::string("/") + to_string(size,10);
+    std::cout << sizeStr << std::endl;
     page = to_string(current+1,10);
-    page += "/1000";
+    std::cout << page << std::endl;
+    page = page + sizeStr;
+    std::cout << page << std::endl;
 }
 
 void moveBy(int count) {
     current += count;
-    current = (current >= SIZE)? 0 : current;
-    current = (current < 0)? SIZE-1 : current;
+    current = (current >= size)? 0 : current;
+    current = (current < 0)? size-1 : current;
     std::cout << Gàidhlig[current] << ": " << Berula[current]  << std::endl;
     page = to_string(current+1,10);
-    page += "/1000";
+    page += sizeStr;
 }
 
 int main(void)
@@ -49,8 +56,7 @@ int main(void)
     const int screenWidth = 600;
     const int screenHeight = 350;
     InitWindow(screenWidth, screenHeight, "Flashcards");
-    clib::string s = to_string(1000,10);
-    SetTargetFPS(15);
+    SetTargetFPS(60);
 
     // Main game loop
     while (!WindowShouldClose())
@@ -60,9 +66,9 @@ int main(void)
             ClearBackground(WHITE);
             DrawText(Gàidhlig[current], (screenWidth/2)-(MeasureText(Gàidhlig[current],TXTSIZE_G)/2), 50, TXTSIZE_G, BLACK);
             DrawText(Berula[current], (screenWidth/2)-(MeasureText(Berula[current],TXTSIZE_B)/2), 120, TXTSIZE_B, BLACK);
-            DrawText(page, 600-MeasureText(page,50),300,50, BLACK);
-            if(IsKeyDown(KEY_RIGHT)) {moveBy(1);}
-            if(IsKeyDown(KEY_LEFT)) {moveBy(-1);}
+            DrawText(page, 0,300,50, BLACK);
+            if(IsKeyPressed(KEY_RIGHT)) {moveBy(1);}
+            if(IsKeyPressed(KEY_LEFT)) {moveBy(-1);}
 
         EndDrawing();
     }

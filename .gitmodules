@@ -1,3 +1,6 @@
 [submodule "clib"]
 	path = clib
 	url = https://github.com/Cieran0/clib.git
+[submodule "LearnGaelic.scot-scraper"]
+	path = LearnGaelic.scot-scraper
+	url = https://github.com/Cieran0/LearnGaelic.scot-scraper.git
