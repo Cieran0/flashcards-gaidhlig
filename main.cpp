@@ -2,23 +2,35 @@
 #include "clib/clibdict.h"
 #include "clib/clibstr.h"
 #include "clib/clibio.h"
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
 
 #define TXTSIZE_G 80
-#define TXTSIZE_B 60
+#define TXTSIZE_B 50
 
 int current = 0;
 int size = 0;
 clib::string* Gàidhlig;
 clib::string* Berula;
+clib::string resourceDir;
 clib::string page;
 clib::string sizeStr;
 Sound* sounds;
 Texture2D play;
 Texture2D mute;
 
+void loadHomeDir() {
+    struct passwd *pw = getpwuid(getuid());
+    char* homedir = pw->pw_dir;
+    std::cout << homedir << std::endl;   
+    resourceDir = clib::string(homedir) + "/usr/flashcards-gàidhlig/";
+    std::cout << resourceDir << std::endl;
+}
+
 void loadImages() {
-    play = LoadTexture("images/play.png");
-    mute = LoadTexture("images/mute.png");
+    play = LoadTexture(resourceDir + "images/play.png");
+    mute = LoadTexture(resourceDir + "images/mute.png");
 }
 
 clib::string to_string(int n, int base) {
@@ -39,7 +51,7 @@ clib::string to_string(int n, int base) {
 void loadAudio() {
     sounds = (Sound*)malloc(sizeof(Sound)*size);
     for(int i = -1; i < size; i++) {
-        clib::string s = clib::string("audio/") + to_string(i,10) + clib::string(".mp3");
+        clib::string s = resourceDir + "audio/" + to_string(i,10) + clib::string(".mp3");
         if(clib::FileExists(s)) {
             sounds[i] = LoadSound(s);
         } else {
@@ -50,10 +62,15 @@ void loadAudio() {
 
 
 void loadWords() {
-    clib::string rawGàidhlig = clib::FileReadAllText("gàidhlig.txt");
+    clib::string rawGàidhlig = clib::FileReadAllText(resourceDir + "text/gàidhlig.txt");
     size = rawGàidhlig.countOccur('\n');
     Gàidhlig = rawGàidhlig.split('\n',size);
-    Berula = clib::FileReadAllText("english.txt").split('\n',size);
+    Berula = clib::FileReadAllText(resourceDir + "text/english.txt").split('\n',size);
+    for (int i = 0; i < size; i++)
+    {
+        Berula[i] = Berula[i].split('/',Berula->countOccur('/'))[0];
+    }
+    
     sizeStr = clib::string("/") + to_string(size,10);
     page = to_string(current+1,10);
     page = page + sizeStr;
@@ -71,6 +88,7 @@ void moveBy(int count) {
 
 int main(void)
 {
+    loadHomeDir();
     loadWords();
     const int screenWidth = 600;
     const int screenHeight = 350;

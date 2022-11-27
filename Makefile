@@ -5,3 +5,8 @@ all:
 	cp LearnGaelic.scot-scraper/*.txt .
 	./getAudio.sh
 	
+install:
+	make all
+	cp LearnGaelic.scot-scraper/*.txt ~/usr/flashcards-gàidhlig/text/
+	cp audio/*.mp3 ~/usr/flashcards-gàidhlig/audio
+	cp images/*.png ~/usr/flashcards-gàidhlig/images
