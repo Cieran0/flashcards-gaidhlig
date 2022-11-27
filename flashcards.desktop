@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Gàidhlig Flashcards
+Comment=Flashcards for remembering gàidhlig words/phrases
+Exec=flashcards-gàidhlig
+Terminal=false
+Type=Application
+Icon=alacarte
+Categories=Programs-Accessories;

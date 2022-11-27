@@ -10,3 +10,5 @@ install:
 	cp LearnGaelic.scot-scraper/*.txt ~/usr/flashcards-gàidhlig/text/
 	cp audio/*.mp3 ~/usr/flashcards-gàidhlig/audio
 	cp images/*.png ~/usr/flashcards-gàidhlig/images
+	sudo cp flashcards.desktop /usr/share/applications
+	cp main	~/bin/flashcards-gàidhlig
