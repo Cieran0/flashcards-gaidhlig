@@ -64,11 +64,11 @@ void loadAudio() {
 void loadWords() {
     clib::string rawGàidhlig = clib::FileReadAllText(resourceDir + "text/gàidhlig.txt");
     size = rawGàidhlig.countOccur('\n');
-    Gàidhlig = rawGàidhlig.split('\n',size);
-    Berula = clib::FileReadAllText(resourceDir + "text/english.txt").split('\n',size);
+    Gàidhlig = rawGàidhlig.split('\n');
+    Berula = clib::FileReadAllText(resourceDir + "text/english.txt").split('\n');
     for (int i = 0; i < size; i++)
     {
-        Berula[i] = Berula[i].split('/',Berula->countOccur('/'))[0];
+        Berula[i] = Berula[i].split('/')[0];
     }
     
     sizeStr = clib::string("/") + to_string(size,10);
